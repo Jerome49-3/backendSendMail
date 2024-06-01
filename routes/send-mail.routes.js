@@ -34,7 +34,7 @@ router.post("/send-mail", async (req, res) => {
         }
       );
       console.log("response:", response);
-      return res.status(200).json({ response });
+      res.status(200).json(response);
     } else {
       res.status(400).json({ message: "bad request" });
     }
