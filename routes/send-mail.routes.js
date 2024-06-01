@@ -21,22 +21,23 @@ router.post("/send-mail", async (req, res) => {
   // res.status(200).json({ message: " welcome on my route sendMail " });
   // console.log("req:", req);
   const { firstname, lastname, email, subject, message } = req.body;
-
   try {
-    console.log("req.body:", req.body);
-    const response = await mgClient.messages.create(
-      process.env.MAILGUN_SANDBOX,
-      {
-        from: `${firstname} ${lastname} <${email}>`,
-        to: process.env.EMAIL_TO_ME,
-        subject: subject,
-        text: message,
-      }
-    );
-    console.log("response:", response);
-    return res
-      .status(200)
-      .json({ response, message: " welcome on my route sendMail " });
+    if (req.body !== undefined) {
+      console.log("req.body:", req.body);
+      const response = await mgClient.messages.create(
+        process.env.MAILGUN_SANDBOX,
+        {
+          from: `${firstname} ${lastname} <${email}>`,
+          to: process.env.EMAIL_TO_ME,
+          subject: subject,
+          text: message,
+        }
+      );
+      console.log("response:", response);
+      return res.status(200).json({ response });
+    } else {
+      res.status(400).json({ message: "bad request" });
+    }
   } catch (error) {
     console.log("error:", error.status, error.message);
   }
